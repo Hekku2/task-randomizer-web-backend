@@ -6,7 +6,12 @@ Backend solution for Task Randomizer Web Backend
  * SignalR
  
 ## Compiling
-dotnet build
+`dotnet build`
 
 ## Running tests
-dotnet test
+`dotnet test`
+
+## Running
+`dotnet run`
+
+This hosts backend at http://localhost:5000
