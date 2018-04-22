@@ -30,6 +30,8 @@ namespace Backend
                     builder =>
                     {
                         builder.AllowAnyOrigin();
+                        builder.AllowAnyMethod();
+                        builder.AllowAnyHeader();
                     })
                 );
 

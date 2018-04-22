@@ -77,7 +77,7 @@ namespace Backend.Controllers
         /// <param name="settings">Session settings</param>
         /// <returns>ID of created session. Can be used for navigating to session.</returns>
         [HttpPost("start")]
-        public string StartSession(SessionSettingsModel settings)
+        public string StartSession([FromBody]SessionSettingsModel settings)
         {
             var game = _gameStorage
                 .GetSingle(settings.GameId)
