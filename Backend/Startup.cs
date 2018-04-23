@@ -10,6 +10,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using DataStorage.Interfaces;
 using DataStorage.Implementations;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Reflection;
+using System.IO;
 
 namespace Backend
 {
@@ -44,6 +47,14 @@ namespace Backend
             services.AddSingleton<IGameSessionEventStorage>((s) => mockGameSessionStorage);
             services.AddSingleton<IGameSessionErrandStorage>((s) => mockGameSessionStorage);
             services.AddMvc();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Task Randomizer API", Version = "v1" });
+                var xmlFile = $"{Assembly.GetEntryAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +64,13 @@ namespace Backend
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Task Randomizer API v1");
+            });
 
             app.UseCors("AllowAllOrigins");
             app.UseMvc();
