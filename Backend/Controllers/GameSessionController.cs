@@ -89,7 +89,7 @@ namespace Backend.Controllers
         }
 
         [HttpPost("join")]
-        public void JoinSession(SessionJoinModel joinParameters)
+        public void JoinSession([FromBody]SessionJoinModel joinParameters)
         {
             _gameSessionStorage.JoinSession(joinParameters.SessionId, joinParameters.PlayerName);
         }
@@ -100,7 +100,7 @@ namespace Backend.Controllers
         /// <param name="parameters">session parameters</param>
         /// <returns>Errand</returns>
         [HttpPost("popErrand")]
-        public ErrandModel PopErrand(SessionContextModel parameters)
+        public ErrandModel PopErrand([FromBody]SessionContextModel parameters)
         {
             var errand = _gameSessionErrandStorage
                 .PopErrand(parameters.SessionId)

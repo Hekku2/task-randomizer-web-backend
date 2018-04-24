@@ -102,7 +102,7 @@ namespace DataStorage.Implementations
                 AddEvent(sessionId, new ErrandPoppedEvent(sessionId, errand.Description));
             }
             
-            return errand.Some();
+            return errand.SomeNotNull();
         }
     }
 }

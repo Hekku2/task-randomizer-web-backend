@@ -3,8 +3,8 @@
     public enum EventType
     {
         None = 0,
-        SessionCreated,
-        PlayerJoined,
-        ErrandPopped
+        SessionCreated = 1,
+        PlayerJoined = 2,
+        ErrandPopped = 3
     }
 }
