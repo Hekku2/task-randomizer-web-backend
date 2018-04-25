@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DataStorage.DataObjects;
 using System;
+using Backend.Services;
 
 namespace Backend.Controllers
 {
@@ -18,16 +19,12 @@ namespace Backend.Controllers
     public class GameSessionController : Controller
     {
         private readonly IGameSessionStorage _gameSessionStorage;
-        private readonly IGameStorage _gameStorage;
-        private readonly IGameErrandStorage _gameErrandStorage;
-        private readonly IGameSessionErrandStorage _gameSessionErrandStorage;
+        private readonly IGameSessionService _gameSessionService;
 
-        public GameSessionController(IGameSessionStorage gameSessionStorage, IGameStorage gameStorage, IGameErrandStorage gameErrandStorage, IGameSessionErrandStorage gameSessionErrandStorage)
+        public GameSessionController(IGameSessionStorage gameSessionStorage, IGameSessionService gameSessionService)
         {
             _gameSessionStorage = gameSessionStorage;
-            _gameStorage = gameStorage;
-            _gameErrandStorage = gameErrandStorage;
-            _gameSessionErrandStorage = gameSessionErrandStorage;
+            _gameSessionService = gameSessionService;
         }
 
         /// <summary>
@@ -79,19 +76,13 @@ namespace Backend.Controllers
         [HttpPost("start")]
         public string StartSession([FromBody]SessionSettingsModel settings)
         {
-            var game = _gameStorage
-                .GetSingle(settings.GameId)
-                .ValueOrFailure($"No game exists with ID {settings.GameId}");
-
-            var errands = _gameErrandStorage.GetForGame(settings.GameId);
-
-            return _gameSessionStorage.CreateSession(game, errands).ToString();   
+            return _gameSessionService.StartSession(settings.GameId).ToString();  
         }
 
         [HttpPost("join")]
         public void JoinSession([FromBody]SessionJoinModel joinParameters)
         {
-            _gameSessionStorage.JoinSession(joinParameters.SessionId, joinParameters.PlayerName);
+            _gameSessionService.JoinSession(joinParameters.SessionId, joinParameters.PlayerName);
         }
 
         /// <summary>
@@ -102,8 +93,7 @@ namespace Backend.Controllers
         [HttpPost("popErrand")]
         public ErrandModel PopErrand([FromBody]SessionContextModel parameters)
         {
-            var errand = _gameSessionErrandStorage
-                .PopErrand(parameters.SessionId)
+            var errand = _gameSessionService.PopErrand(parameters.SessionId)
                 .ValueOrFailure($"No errands for session with ID {parameters.SessionId}");
 
             return new ErrandModel

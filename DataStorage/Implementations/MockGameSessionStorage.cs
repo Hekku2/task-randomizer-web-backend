@@ -29,7 +29,6 @@ namespace DataStorage.Implementations
                 Players = new List<string>()
             };
             _sessions.Add(session);
-            AddEvent(session.Id, new Event(session.Id, EventType.SessionCreated, "Session created", "Session created"));
             return session.Id;
         }
 
@@ -54,7 +53,6 @@ namespace DataStorage.Implementations
                 .SomeNotNull()
                 .ValueOrFailure($"No session found with ID {sessionId}");
             session.Players.Add(playerName);
-            AddEvent(session.Id, new PlayerJoinedEvent(sessionId, playerName));
         }
 
         public Option<GameSession> GetSingle(Guid id)
@@ -74,7 +72,7 @@ namespace DataStorage.Implementations
             }
         }
 
-        private void AddEvent(Guid sessionId, Event sessionEvent)
+        public void AddEvent(Guid sessionId, Event sessionEvent)
         {
             try
             {
@@ -99,7 +97,6 @@ namespace DataStorage.Implementations
             if (errand != null)
             {
                 session.Errands.RemoveAt(0);
-                AddEvent(sessionId, new ErrandPoppedEvent(sessionId, errand.Description));
             }
             
             return errand.SomeNotNull();

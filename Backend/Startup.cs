@@ -13,6 +13,8 @@ using DataStorage.Implementations;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Reflection;
 using System.IO;
+using Backend.Hubs;
+using Backend.Services;
 
 namespace Backend
 {
@@ -46,7 +48,10 @@ namespace Backend
             services.AddSingleton<IGameSessionStorage>((s) => mockGameSessionStorage);
             services.AddSingleton<IGameSessionEventStorage>((s) => mockGameSessionStorage);
             services.AddSingleton<IGameSessionErrandStorage>((s) => mockGameSessionStorage);
+            services.AddTransient<IGameSessionService, GameSessionService>();
             services.AddMvc();
+
+            services.AddSignalR();
 
             services.AddSwaggerGen(c =>
             {
@@ -73,6 +78,10 @@ namespace Backend
             });
 
             app.UseCors("AllowAllOrigins");
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<GameSessionHub>("/gameSessionHub");
+            });
             app.UseMvc();
         }
     }

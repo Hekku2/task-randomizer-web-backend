@@ -9,6 +9,7 @@ using Optional.Unsafe;
 using Backend.Models;
 using System;
 using System.Collections.Generic;
+using Backend.Services;
 
 namespace BackendUnitTests.Controllers
 {
@@ -16,17 +17,13 @@ namespace BackendUnitTests.Controllers
     public class GameSessionControllerTests : BaseControllerTests<GameSessionController>
     {
         private IGameSessionStorage _mockGameSessionStorage;
-        private IGameStorage _mockGameStorage;
-        private IGameErrandStorage _mockGameErrandStorage;
-        private IGameSessionErrandStorage _mockGameSessionErrandStorage;
+        private IGameSessionService _mockGameSessionService;
 
         protected override void OnSetup()
         {
             _mockGameSessionStorage = Substitute.For<IGameSessionStorage>();
-            _mockGameStorage = Substitute.For<IGameStorage>();
-            _mockGameErrandStorage = Substitute.For<IGameErrandStorage>();
-            _mockGameSessionErrandStorage = Substitute.For<IGameSessionErrandStorage>();
-            Controller = new GameSessionController(_mockGameSessionStorage, _mockGameStorage, _mockGameErrandStorage, _mockGameSessionErrandStorage);
+            _mockGameSessionService = Substitute.For<IGameSessionService>();
+            Controller = new GameSessionController(_mockGameSessionStorage, _mockGameSessionService);
         }
 
         #region GetAll
@@ -127,28 +124,12 @@ namespace BackendUnitTests.Controllers
                 GameId = 8887
             };
 
-            var game = new Game() { Id = settings.GameId };
-            _mockGameStorage.GetSingle(game.Id).Returns(game.Some());
-
-            var errands = Enumerable.Range(1, 6).Select(i => new Errand { Id = i, Description = "Errand " + i});
-            _mockGameErrandStorage.GetForGame(game.Id).Returns(errands);
-
             var guid = Guid.NewGuid();
-            _mockGameSessionStorage.CreateSession(game, errands).Returns(guid);
+            _mockGameSessionStorage.DidNotReceive().CreateSession(Arg.Any<Game>(), Arg.Any<IEnumerable<Errand>>());
+            _mockGameSessionService.StartSession(settings.GameId).Returns(guid);
 
             var result = Controller.StartSession(settings);
             Assert.AreEqual(guid.ToString(), result);
-        }
-
-        [Test]
-        public void Test_StartSession_ThrowsOptionValueMissingExceptionWhenGamesIsNotFound()
-        {
-            var settings = new SessionSettingsModel
-            {
-                GameId = 666
-            };
-            var ex = Assert.Throws<OptionValueMissingException>(() => Controller.StartSession(settings));
-            Assert.AreEqual("No game exists with ID 666", ex.Message);
         }
 
         #endregion
@@ -165,7 +146,7 @@ namespace BackendUnitTests.Controllers
             };
             Controller.JoinSession(join);
 
-            _mockGameSessionStorage.Received().JoinSession(join.SessionId, join.PlayerName);
+            _mockGameSessionService.Received().JoinSession(join.SessionId, join.PlayerName);
         }
 
         #endregion

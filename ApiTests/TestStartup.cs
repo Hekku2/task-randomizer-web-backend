@@ -14,6 +14,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.Reflection;
 using System.IO;
 using Backend.Hubs;
+using Backend.Services;
 
 namespace ApiTests
 {
@@ -47,9 +48,13 @@ namespace ApiTests
             services.AddSingleton<IGameSessionStorage>((s) => mockGameSessionStorage);
             services.AddSingleton<IGameSessionEventStorage>((s) => mockGameSessionStorage);
             services.AddSingleton<IGameSessionErrandStorage>((s) => mockGameSessionStorage);
+            services.AddSingleton<IGameSessionService, GameSessionService>();
             services.AddMvc();
 
-            services.AddSignalR();
+            services.AddSignalR(options => 
+            {
+                options.EnableDetailedErrors = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,11 +66,12 @@ namespace ApiTests
             }
 
             app.UseCors("AllowAllOrigins");
+
+            app.UseMvc();
             app.UseSignalR(routes =>
             {
                 routes.MapHub<GameSessionHub>("/gameSessionHub");
             });
-            app.UseMvc();
         }
     }
 }

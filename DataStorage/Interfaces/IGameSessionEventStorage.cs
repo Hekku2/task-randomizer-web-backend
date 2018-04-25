@@ -12,5 +12,6 @@ namespace DataStorage.Interfaces
         /// <param name="sessionId">ID of session</param>
         /// <returns>Events of session</returns>
         List<Event> GetEvents(Guid sessionId);
+        void AddEvent(Guid sessionId, Event sessionEvent);
     }
 }
