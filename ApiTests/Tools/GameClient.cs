@@ -1,5 +1,4 @@
 ﻿using Backend.Models;
-using DataStorage.DataObjects.Events;
 using NUnit.Framework;
 using System;
 using System.Net.Http;
@@ -62,11 +61,11 @@ namespace ApiTests.Tools
             return errand;
         }
 
-        public async Task<Event[]> GetEvents(Guid sessionId)
+        public async Task<SessionEventModel[]> GetEvents(Guid sessionId)
         {
             var response = await _client.GetAsync(eventsUrl + sessionId);
             response.EnsureSuccessStatusCode();
-            var events = await response.ToObject<Event[]>();
+            var events = await response.ToObject<SessionEventModel[]>();
             Assert.NotNull(events);
             foreach (var ev in events)
             {

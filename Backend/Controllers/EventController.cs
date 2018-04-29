@@ -1,4 +1,5 @@
-﻿using DataStorage.DataObjects.Events;
+﻿using Backend.Models;
+using DataStorage.DataObjects.Events;
 using DataStorage.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -28,9 +29,23 @@ namespace Backend.Controllers
         /// <param name="sessionId">ID of session</param>
         /// <returns>events in order</returns>
         [HttpGet("{sessionId}")]
-        public List<Event> GetEvents(Guid sessionId)
+        public List<SessionEventModel> GetEvents(Guid sessionId)
         {
-            return _gameSessionEventStorage.GetEvents(sessionId).ToList();
+            return _gameSessionEventStorage
+                .GetEvents(sessionId)
+                .Select(CreateSessionEvent)
+                .ToList();
+        }
+
+        private SessionEventModel CreateSessionEvent(Event sessionEvent)
+        {
+            return new SessionEventModel
+            {
+                SessionId = sessionEvent.SessionId,
+                EventType = sessionEvent.EventType.ToString(),
+                Name = sessionEvent.Name,
+                Description = sessionEvent.Description
+            };
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using ApiTests.Tools;
-using DataStorage.DataObjects.Events;
+using Backend.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.TestHost;
@@ -33,7 +33,7 @@ namespace ApiTests
 
                 var session = await client.StartSession(1);
 
-                var channel = await connection.StreamAsChannelAsync<Event>("StreamSessionEvents", session);
+                var channel = await connection.StreamAsChannelAsync<SessionEventModel>("StreamSessionEvents", session);
                 var eventReader = ReadEvent(channel);
                 Thread.Sleep(100);
                 await client.JoinGame(session, "test player");
@@ -44,7 +44,7 @@ namespace ApiTests
             }
         }
 
-        private async Task<Event> ReadEvent(ChannelReader<Event> reader)
+        private async Task<SessionEventModel> ReadEvent(ChannelReader<SessionEventModel> reader)
         {
             var cts = new CancellationTokenSource();
             cts.CancelAfter(TimeSpan.FromSeconds(5));
