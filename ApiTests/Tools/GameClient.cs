@@ -56,7 +56,7 @@ namespace ApiTests.Tools
             var response = await _client.PostAsJsonAsync(gameSessionUrl + "popErrand", model);
             response.EnsureSuccessStatusCode();
 
-            var errand = await response.ToObject<ErrandModel>();
+            var errand = (await response.ToObject<ErrandModel[]>())[0];
             Assert.NotNull(errand);
             Assert.IsFalse(string.IsNullOrWhiteSpace(errand.Description));
             return errand;

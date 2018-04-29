@@ -150,5 +150,47 @@ namespace BackendUnitTests.Controllers
         }
 
         #endregion
+
+        #region PopErrand
+
+        [Test]
+        public void Test_PopErrand_ReturnsErrand()
+        {
+            var contextModel = new SessionContextModel
+            {
+                SessionId = Guid.NewGuid()
+            };
+
+            var errand = new Errand
+            {
+                Id = 123,
+                Description = "Jump around or don't, I'm not your father."
+            };
+
+            _mockGameSessionService.PopErrand(contextModel.SessionId).Returns(errand.Some());
+
+            var result = Controller.PopErrand(contextModel);
+            Assert.NotNull(result);
+            Assert.AreEqual(1, result.Length, "There should be only one errand in array");
+            Assert.AreEqual(errand.Description, result[0].Description);
+            Assert.AreEqual(errand.Id, result[0].Id);
+        }
+
+        [Test]
+        public void Test_PopErrand_ReturnsEmptyArrayIfThereAreNoErrands()
+        {
+            var contextModel = new SessionContextModel
+            {
+                SessionId = Guid.NewGuid()
+            };
+
+            _mockGameSessionService.PopErrand(contextModel.SessionId).Returns(new Option<Errand>());
+
+            var result = Controller.PopErrand(contextModel);
+            Assert.NotNull(result);
+            Assert.AreEqual(0, result.Length, "There should be no items in array");
+        }
+
+        #endregion
     }
 }

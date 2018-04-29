@@ -86,21 +86,18 @@ namespace Backend.Controllers
         }
 
         /// <summary>
-        /// Pops and returns errand for session
+        /// Pops and returns errand for session. If no errand exists, empty array is returned
         /// </summary>
         /// <param name="parameters">session parameters</param>
         /// <returns>Errand</returns>
         [HttpPost("popErrand")]
-        public ErrandModel PopErrand([FromBody]SessionContextModel parameters)
+        public ErrandModel[] PopErrand([FromBody]SessionContextModel parameters)
         {
-            var errand = _gameSessionService.PopErrand(parameters.SessionId)
-                .ValueOrFailure($"No errands for session with ID {parameters.SessionId}");
-
-            return new ErrandModel
-            {
-                Id = errand.Id,
-                Description = errand.Description
-            };
+            return _gameSessionService
+                .PopErrand(parameters.SessionId)
+                .Select(CreateErrandModel)
+                .ToEnumerable()
+                .ToArray();
         }
     }
 }
