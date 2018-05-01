@@ -44,7 +44,7 @@ namespace ApiTests.Tools
 
         public async Task JoinGame(Guid sessionId, string player)
         {
-            var model = new SessionJoinModel { SessionId = sessionId, PlayerName = player };
+            var model = new SessionContextModel { SessionId = sessionId, PlayerName = player };
             var response = await _client.PostAsJsonAsync(gameSessionUrl + "join", model);
             response.EnsureSuccessStatusCode();
         }

@@ -55,6 +55,15 @@ namespace DataStorage.Implementations
             session.Players.Add(playerName);
         }
 
+        public void LeaveSession(Guid sessionId, string playerName)
+        {
+            var session = _sessions
+             .FirstOrDefault(s => s.Id == sessionId)
+             .SomeNotNull()
+             .ValueOrFailure($"No session found with ID {sessionId}");
+            session.Players.Remove(playerName);
+        }
+
         public Option<GameSession> GetSingle(Guid id)
         {
             return _sessions.FirstOrDefault(session => session.Id == id).SomeNotNull();

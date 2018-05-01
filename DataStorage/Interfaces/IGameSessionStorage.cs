@@ -9,6 +9,7 @@ namespace DataStorage.Interfaces
     {
         Guid CreateSession(Game game, IEnumerable<Errand> errands);
         void JoinSession(Guid sessionId, string playerName);
+        void LeaveSession(Guid sessionId, string playerName);
         IEnumerable<GameSession> GetAll();
         Option<GameSession> GetSingle(Guid id);
     }

@@ -80,9 +80,15 @@ namespace Backend.Controllers
         }
 
         [HttpPost("join")]
-        public void JoinSession([FromBody]SessionJoinModel joinParameters)
+        public void JoinSession([FromBody]SessionContextModel joinParameters)
         {
             _gameSessionService.JoinSession(joinParameters.SessionId, joinParameters.PlayerName);
+        }
+
+        [HttpPost("leave")]
+        public void LeaveSession([FromBody]SessionContextModel joinParameters)
+        {
+            _gameSessionService.LeaveSession(joinParameters.SessionId, joinParameters.PlayerName);
         }
 
         /// <summary>

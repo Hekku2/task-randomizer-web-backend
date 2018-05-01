@@ -1,5 +1,6 @@
 ﻿using Backend.Services;
 using DataStorage.DataObjects;
+using DataStorage.DataObjects.Events;
 using DataStorage.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
@@ -56,7 +57,7 @@ namespace BackendUnitTests.Services
         }
 
         [Test]
-        public void Test_StartSession_ThrowsOptionValueMissingExceptionWhenGamesIsNotFound()
+        public void Test_StartSession_ThrowsOptionValueMissingExceptionWhenGameIsNotFound()
         {
             var gameId = 666;
             var ex = Assert.Throws<OptionValueMissingException>(() => _service.StartSession(gameId));
@@ -75,6 +76,39 @@ namespace BackendUnitTests.Services
             _service.JoinSession(guid, playerName);
 
             _mockGameSessionStorage.Received().JoinSession(guid, playerName);
+        }
+
+        [Test]
+        public void Test_JoinSession_AddsCorrectEvent()
+        {
+            var guid = Guid.NewGuid();
+            var playerName = "playerplayer";
+            _service.JoinSession(guid, playerName);
+
+            _mockGameSessionEventStorage.Received().AddEvent(guid, Arg.Any<PlayerJoinedEvent>());
+        }
+        #endregion
+
+        #region LeaveSession
+
+        [Test]
+        public void Test_LeaveSession_LeavesSession()
+        {
+            var guid = Guid.NewGuid();
+            var playerName = "playerplayer";
+            _service.LeaveSession(guid, playerName);
+
+            _mockGameSessionStorage.Received().LeaveSession(guid, playerName);
+        }
+
+        [Test]
+        public void Test_LeaveSession_AddsCorrectEvent()
+        {
+            var guid = Guid.NewGuid();
+            var playerName = "playerplayer";
+            _service.LeaveSession(guid, playerName);
+
+            _mockGameSessionEventStorage.Received().AddEvent(guid, Arg.Any<PlayerLeftEvent>());
         }
 
         #endregion

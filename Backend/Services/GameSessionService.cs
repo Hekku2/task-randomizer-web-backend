@@ -1,5 +1,4 @@
-﻿using Backend.Models;
-using DataStorage.DataObjects;
+﻿using DataStorage.DataObjects;
 using DataStorage.DataObjects.Events;
 using DataStorage.Interfaces;
 using Optional;
@@ -9,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
 
 namespace Backend.Services
 {
@@ -57,6 +55,14 @@ namespace Backend.Services
         {
             _gameSessionStorage.JoinSession(sessionId, playerName);
             var newEvent = new PlayerJoinedEvent(sessionId, playerName);
+            _gameSessionEvents.OnNext(newEvent);
+            _gameSessionEventStorage.AddEvent(sessionId, newEvent);
+        }
+
+        public void LeaveSession(Guid sessionId, string playerName)
+        {
+            _gameSessionStorage.LeaveSession(sessionId, playerName);
+            var newEvent = new PlayerLeftEvent(sessionId, playerName);
             _gameSessionEvents.OnNext(newEvent);
             _gameSessionEventStorage.AddEvent(sessionId, newEvent);
         }

@@ -139,7 +139,7 @@ namespace BackendUnitTests.Controllers
         [Test]
         public void Test_JoinSession_JoinsSession()
         {
-            var join = new SessionJoinModel
+            var join = new SessionContextModel
             {
                 SessionId = Guid.NewGuid(),
                 PlayerName = "player player"
@@ -147,6 +147,23 @@ namespace BackendUnitTests.Controllers
             Controller.JoinSession(join);
 
             _mockGameSessionService.Received().JoinSession(join.SessionId, join.PlayerName);
+        }
+
+        #endregion
+
+        #region LeaveSession
+
+        [Test]
+        public void Test_LeaveSession_LeavesSession()
+        {
+            var join = new SessionContextModel
+            {
+                SessionId = Guid.NewGuid(),
+                PlayerName = "player player"
+            };
+            Controller.LeaveSession(join);
+
+            _mockGameSessionService.Received().LeaveSession(join.SessionId, join.PlayerName);
         }
 
         #endregion

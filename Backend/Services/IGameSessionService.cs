@@ -9,6 +9,7 @@ namespace Backend.Services
     {
         Guid StartSession(long gameId);
         void JoinSession(Guid sessionId, string playerName);
+        void LeaveSession(Guid sessionId, string playerName);
         Option<Errand> PopErrand(Guid sessionId);
         IObservable<Event> StreamEvents(Guid sessionId);
     }
