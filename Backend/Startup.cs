@@ -30,15 +30,16 @@ namespace Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-                options.AddPolicy("AllowAllOrigins",
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin();
-                        builder.AllowAnyMethod();
-                        builder.AllowAnyHeader();
-                    })
-                );
+            services.AddCors(o =>
+            {
+                o.AddPolicy("Everything", p =>
+                {
+                    p.AllowAnyHeader()
+                     .AllowAnyMethod()
+                     .AllowAnyOrigin()
+                     .AllowCredentials();
+                });
+            });
 
             var mockStorage = new MockStorage();
             var mockGameSessionStorage = new MockGameSessionStorage();
@@ -48,7 +49,7 @@ namespace Backend
             services.AddSingleton<IGameSessionStorage>((s) => mockGameSessionStorage);
             services.AddSingleton<IGameSessionEventStorage>((s) => mockGameSessionStorage);
             services.AddSingleton<IGameSessionErrandStorage>((s) => mockGameSessionStorage);
-            services.AddTransient<IGameSessionService, GameSessionService>();
+            services.AddSingleton<IGameSessionService, GameSessionService>();
             services.AddMvc();
 
             services.AddSignalR();
@@ -77,7 +78,7 @@ namespace Backend
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Task Randomizer API v1");
             });
 
-            app.UseCors("AllowAllOrigins");
+            app.UseCors("Everything");
             app.UseSignalR(routes =>
             {
                 routes.MapHub<GameSessionHub>("/gameSessionHub");

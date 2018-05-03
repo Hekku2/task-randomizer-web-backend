@@ -19,10 +19,5 @@ namespace Backend.Hubs
         {
             return _gameSessionService.StreamEvents(sessionId);
         }
-
-        public async Task SendEvent(Guid sessionId, Event gameSessionEvent)
-        {
-            await Clients.All.SendAsync("ReceiveSessionEvent", sessionId, gameSessionEvent);
-        }
     }
 }
