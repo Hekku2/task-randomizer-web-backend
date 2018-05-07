@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System;
-using System.Threading.Tasks;
 using Backend.Services;
 using DataStorage.DataObjects.Events;
+using System.Reactive.Linq;
+using Backend.Models;
 
 namespace Backend.Hubs
 {
@@ -15,9 +16,20 @@ namespace Backend.Hubs
             _gameSessionService = gameSessionService;
         }
 
-        public IObservable<Event> StreamSessionEvents(Guid sessionId)
+        public IObservable<SessionEventModel> StreamSessionEvents(Guid sessionId)
         {
-            return _gameSessionService.StreamEvents(sessionId);
+            return _gameSessionService.StreamEvents(sessionId).Select(CreateSessionEvent);
+        }
+
+        private SessionEventModel CreateSessionEvent(Event sessionEvent)
+        {
+            return new SessionEventModel
+            {
+                SessionId = sessionEvent.SessionId,
+                EventType = sessionEvent.EventType.ToString(),
+                Name = sessionEvent.Name,
+                Description = sessionEvent.Description
+            };
         }
     }
 }
