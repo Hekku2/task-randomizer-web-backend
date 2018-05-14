@@ -23,9 +23,7 @@ namespace Backend.Services
         private readonly IGameSessionEventStorage _gameSessionEventStorage;
 
         private ISubject<Event> _gameSessionEvents;
-
-        private List<IObservable<Event>> paskaa = new List<IObservable<Event>>();
-
+        
         public GameSessionService(IGameSessionStorage gameSessionStorage, IGameStorage gameStorage, IGameErrandStorage gameErrandStorage, IGameSessionErrandStorage gameSessionErrandStorage, IGameSessionEventStorage gameSessionEventStorage)
         {
             _gameSessionStorage = gameSessionStorage;
