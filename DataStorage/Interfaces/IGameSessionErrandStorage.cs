@@ -10,5 +10,6 @@ namespace DataStorage.Interfaces
     public interface IGameSessionErrandStorage
     {
         Option<Errand> PopErrand(Guid sessionId);
+        Option<int> ErrandsRemaining(Guid sessionId);
     }
 }

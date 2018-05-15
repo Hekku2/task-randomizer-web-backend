@@ -71,7 +71,8 @@ namespace Backend.Services
                 .PopErrand(sessionId);
             errand.MatchSome(value => 
             {
-                var newEvent = new ErrandPoppedEvent(sessionId, value.Description);
+                var remainingEvents = _gameSessionErrandStorage.ErrandsRemaining(sessionId).ValueOrFailure("No session found");
+                var newEvent = new ErrandPoppedEvent(sessionId, value.Description, remainingEvents);
                 _gameSessionEvents.OnNext(newEvent);
                 _gameSessionEventStorage.AddEvent(sessionId, newEvent);
             });

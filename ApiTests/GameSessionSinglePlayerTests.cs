@@ -35,7 +35,9 @@ namespace ApiTests
                 Assert.AreEqual("Session created", events[0].Name);
                 Assert.AreEqual("Player Gamer 123 joined", events[1].Name);
                 Assert.AreEqual("Errand popped", events[2].Name);
+                Assert.AreEqual(1, events[2].Context.GetValue("ErrandsRemaining").ToObject(typeof(int)));
                 Assert.AreEqual("Errand popped", events[3].Name);
+                Assert.AreEqual(0, events[3].Context.GetValue("ErrandsRemaining").ToObject(typeof(int)));
             }
         }
     }

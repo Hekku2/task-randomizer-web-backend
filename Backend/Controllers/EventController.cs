@@ -44,7 +44,8 @@ namespace Backend.Controllers
                 SessionId = sessionEvent.SessionId,
                 EventType = sessionEvent.EventType.ToString(),
                 Name = sessionEvent.Name,
-                Description = sessionEvent.Description
+                Description = sessionEvent.Description,
+                Context = sessionEvent.Context
             };
         }
     }

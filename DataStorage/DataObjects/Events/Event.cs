@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 
 namespace DataStorage.DataObjects.Events
 {
@@ -8,6 +9,8 @@ namespace DataStorage.DataObjects.Events
         public EventType EventType { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+
+        public JObject Context { get; set; }
 
         public Event() { }
 

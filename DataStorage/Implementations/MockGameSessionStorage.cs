@@ -110,5 +110,13 @@ namespace DataStorage.Implementations
             
             return errand.SomeNotNull();
         }
+
+        public Option<int> ErrandsRemaining(Guid sessionId)
+        {
+            return _sessions
+                .FirstOrDefault(s => s.Id == sessionId)
+                .SomeNotNull()
+                .Map(s => s.Errands.Count);
+        }
     }
 }
