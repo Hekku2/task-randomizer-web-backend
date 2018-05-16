@@ -100,7 +100,7 @@ namespace Backend.Controllers
         public ErrandModel[] PopErrand([FromBody]SessionContextModel parameters)
         {
             return _gameSessionService
-                .PopErrand(parameters.SessionId)
+                .PopErrand(parameters.SessionId, parameters.PlayerName)
                 .Select(CreateErrandModel)
                 .ToEnumerable()
                 .ToArray();

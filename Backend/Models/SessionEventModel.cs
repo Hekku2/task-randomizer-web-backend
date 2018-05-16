@@ -9,6 +9,7 @@ namespace Backend.Models
         public string EventType { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public DateTime Timestamp { get; set; }
         public JObject Context { get; set; }
     }
 }

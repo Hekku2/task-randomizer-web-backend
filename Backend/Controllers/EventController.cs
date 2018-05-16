@@ -41,6 +41,7 @@ namespace Backend.Controllers
         {
             return new SessionEventModel
             {
+                Timestamp = sessionEvent.Timestamp,
                 SessionId = sessionEvent.SessionId,
                 EventType = sessionEvent.EventType.ToString(),
                 Name = sessionEvent.Name,

@@ -57,7 +57,8 @@ namespace BackendUnitTests.Controllers
                         actual.Name == item.Name &&
                         actual.SessionId == item.SessionId &&
                         actual.EventType == item.EventType.ToString() &&
-                        actual.Description == item.Description));
+                        actual.Description == item.Description &&
+                        actual.Timestamp == item.Timestamp));
             }
         }
 

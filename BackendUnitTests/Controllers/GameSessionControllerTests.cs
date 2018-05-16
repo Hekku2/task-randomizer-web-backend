@@ -175,7 +175,8 @@ namespace BackendUnitTests.Controllers
         {
             var contextModel = new SessionContextModel
             {
-                SessionId = Guid.NewGuid()
+                SessionId = Guid.NewGuid(),
+                PlayerName = "Player One"
             };
 
             var errand = new Errand
@@ -184,7 +185,7 @@ namespace BackendUnitTests.Controllers
                 Description = "Jump around or don't, I'm not your father."
             };
 
-            _mockGameSessionService.PopErrand(contextModel.SessionId).Returns(errand.Some());
+            _mockGameSessionService.PopErrand(contextModel.SessionId, contextModel.PlayerName).Returns(errand.Some());
 
             var result = Controller.PopErrand(contextModel);
             Assert.NotNull(result);
@@ -198,10 +199,11 @@ namespace BackendUnitTests.Controllers
         {
             var contextModel = new SessionContextModel
             {
-                SessionId = Guid.NewGuid()
+                SessionId = Guid.NewGuid(),
+                PlayerName = "Player One"
             };
 
-            _mockGameSessionService.PopErrand(contextModel.SessionId).Returns(new Option<Errand>());
+            _mockGameSessionService.PopErrand(contextModel.SessionId, contextModel.PlayerName).Returns(new Option<Errand>());
 
             var result = Controller.PopErrand(contextModel);
             Assert.NotNull(result);
