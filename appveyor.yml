@@ -10,6 +10,7 @@ before_build:
 build_script:
 - dotnet build
 test_script:
-- dotnet test
+- dotnet test BackendUnitTests
+- dotnet test ApiTests
 cache:
 - '%USERPROFILE%\.nuget\packages'
