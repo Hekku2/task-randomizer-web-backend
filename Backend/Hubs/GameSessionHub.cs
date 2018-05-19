@@ -4,6 +4,8 @@ using Backend.Services;
 using DataStorage.DataObjects.Events;
 using System.Reactive.Linq;
 using Backend.Models;
+using System.Threading.Channels;
+using System.Threading.Tasks;
 
 namespace Backend.Hubs
 {
@@ -16,9 +18,9 @@ namespace Backend.Hubs
             _gameSessionService = gameSessionService;
         }
 
-        public IObservable<SessionEventModel> StreamSessionEvents(Guid sessionId)
+        public ChannelReader<SessionEventModel> StreamSessionEvents(Guid sessionId)
         {
-            return _gameSessionService.StreamEvents(sessionId).Select(CreateSessionEvent);
+            return _gameSessionService.StreamEvents(sessionId).Select(CreateSessionEvent).AsChannelReader();
         }
 
         private SessionEventModel CreateSessionEvent(Event sessionEvent)

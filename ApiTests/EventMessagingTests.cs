@@ -3,6 +3,8 @@ using Backend.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.AspNetCore.Http.Connections.Client;
 using NUnit.Framework;
 using System;
 using System.Threading;
@@ -23,11 +25,12 @@ namespace ApiTests
                 var client = new GameClient(server.CreateClient());
 
                 var messageHandler = server.CreateHandler();
+                
                 var connection = new HubConnectionBuilder()
-                    .WithUrl($"http://{server.Host}/gameSessionHub")
-                    .WithMessageHandler(_ => messageHandler)
-                    .WithTransport(Microsoft.AspNetCore.Http.Connections.TransportType.LongPolling)
-                    .WithConsoleLogger()
+                    .WithUrl($"http://{server.Host}/gameSessionHub", HttpTransportType.LongPolling, con => 
+                    {
+                        con.HttpMessageHandlerFactory = _ => messageHandler;
+                    })
                     .Build();
                 await connection.StartAsync();
 
