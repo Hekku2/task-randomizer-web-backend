@@ -1,0 +1,15 @@
+version: '{build}'
+configuration:
+- Debug
+- Release
+platform: Any CPU
+environment:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+before_build:
+- appveyor-retry dotnet restore -v Minimal
+build_script:
+- dotnet build
+test_script:
+- dotnet test
+cache:
+- '%USERPROFILE%\.nuget\packages'
