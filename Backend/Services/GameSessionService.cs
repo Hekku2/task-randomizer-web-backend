@@ -43,7 +43,7 @@ namespace Backend.Services
 
             var errands = _gameErrandStorage.GetForGame(gameId);
             var sessionId = _gameSessionStorage.CreateSession(game, errands);
-            var newEvent = new Event(sessionId, EventType.SessionCreated, "Session created", "Session created");
+            var newEvent = new SessionCreatedEvent(sessionId, errands.Count());
             _gameSessionEvents.OnNext(newEvent);
             _gameSessionEventStorage.AddEvent(sessionId, newEvent);
             return sessionId;
