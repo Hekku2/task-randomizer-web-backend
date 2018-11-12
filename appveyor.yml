@@ -13,10 +13,6 @@ test_script:
 - dotnet test BackendUnitTests --logger:trx
 - dotnet test ApiTests --logger:trx
 on_finish:
-  - sh: |
-      find "$APPVEYOR_BUILD_FOLDER" -type f -name 'TestResults.trx' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/nunit3/$APPVEYOR_JOB_ID"
+  - sh: find "$APPVEYOR_BUILD_FOLDER" -type f -name 'TestResults.trx' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/nunit3/$APPVEYOR_JOB_ID"
 cache:
 - '%USERPROFILE%\.nuget\packages'
-
-
-APPVEYOR_JOB_ID
